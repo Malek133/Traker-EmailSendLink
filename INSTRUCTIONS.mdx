@@ -1,0 +1,108 @@
+# Github Action
+
+### 💡 Créer et optimiser des workflows
+
+## 📝 Tes notes
+
+Détaille ce que tu as appris ici, sur une page [Notion](https://go.mikecodeur.com/course-notes-template)
+
+## Comprendre
+
+GitHub Actions est une solution d'intégration et de déploiement continu (`CI/CD`) directement intégrée à GitHub. Elle te permet d'automatiser des workflows comme les tests, les déploiements, ou les analyses de code à chaque `push` ou `pull request`. Simple à configurer grâce à des fichiers `YAML`. GitHub Actions offre une grande flexibilité pour personnaliser tes pipelines.
+
+Dans ce module, tu apprendras à créer et à optimiser des workflows pour gagner en productivité et en fiabilité.
+
+Le dossier `.github` est le cœur de la configuration des **GitHub Actions** dans un projet. Il contient le répertoire `workflows`, où sont définis les pipelines d'automatisation comme les tests, les builds ou les déploiements.
+
+Dans ce module, apprends à utiliser ce dossier pour créer et personnaliser des workflows adaptés à tes besoins.
+
+Exemple de `github` action qui permet de :
+
+- Lancer les tests.
+- Builder.
+- Exécuter les migrations `drizzle`.
+
+```yaml
+name: Vercel Preview Deployment
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  Test-and-Deploy-Preview:
+    runs-on: ubuntu-latest
+    environment: preview
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Check
+        run: pnpm lint
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Run Tests
+        run: pnpm test
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Build Project
+        run: pnpm build
+        env:
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      # Installer Drizzle CLI
+      - name: Install Drizzle CLI
+        run: npm install -g drizzle-kit
+
+      # Exécuter les migrations Drizzle
+      - name: Run Drizzle migrations
+        working-directory: packages/persistence
+        run: pnpm db:migrate
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+```
+
+📑 Le lien vers la doc https://github.com/features/actions
+
+## Exercice
+
+Adapte les actions aux besoins de ton projet
+
+Fichiers
+
+- .`github/workflows/preview.yaml`
+
+## Ils vont t’aider
+
+- **🐶 Mowgli le Chien** : _Mowgli te guidera dans chaque exercice._
+- **🤖 Ash le Robot** : _Ash le Robot te donnera du code utile._
+- **🚀 Julia La roquette** : _Julia te donnera des défis supplémentaires._
+- **⛏️ Hulk le Marteau** : _Quand du code à supprimer est présent_
+- **👨‍✈️ Hugo le chef de projet** : _Va t'aider sur les spécifications du projet_
+
+## 🐜 Feedback
+
+Remplir le formulaire le [formulaire de FeedBack](https://go.mikecodeur.com/cours-next-avis?entry.1912869708=Next%20Mastery&entry.1430994900=9.SAAS%20Entrepreneur&entry.533578441=18%20ci/cd%20github-action).
