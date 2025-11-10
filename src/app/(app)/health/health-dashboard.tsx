@@ -76,11 +76,13 @@ const HealthDashboard = async (props: HealthDashboardProps) => {
         weeks={weeks}
       >
         <HealthBarChart data={healthsFormatted} />
-        {hasCurrentWeek ? (
+        {/* {hasCurrentWeek ? (
           <HealthDataTable healthTable={healthData} uid={userId} />
         ) : (
           <div>No data for this week</div>
-        )}
+        )} */}
+        <HealthDataTable healthTable={healthData} uid={userId} />
+
       </HealthYearSelect>
     </div>
   )

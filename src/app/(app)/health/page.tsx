@@ -16,6 +16,7 @@ const Page = async (props: {searchParams?: SearchParams}) => {
   const params = await props.searchParams
 
   return (
+    
     <HealthDashboard
       healthYear={params?.healthYear}
       healthWeek={params?.healthWeek}
